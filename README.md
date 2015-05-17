@@ -10,3 +10,42 @@ Well, Flux again ...
  - without singleton global flux object
  
 
+## Store
+
+Store in Fluce is just an object with shape `{initial: Function, reducers: {foo: Function, bar: Function, ...}}`, where `initial()` returns an intial state, and each of `reducers` is event handlers called with a current _state_ and the event _payload_ as arguments and return a new _state_. Each reducer must be a pure function, that never mutates current state, but returns a new one instead. A reducer's name (e.g. `foo` above) is an event type which that reducer handles.
+
+```js
+let fooStore = {
+  initial() {
+    return [];
+  },
+  reducers: {
+    addFoo(foos, newFoo) {
+      return foos.concat([newFoo]);
+    }
+  }
+};
+```
+
+
+## Action creators
+
+Action creator in Fluce is a function that returns another function:
+
+```js
+let myAction = function(flux) {
+  return function(some, args) {
+    const payload = {some, args};
+    flux.dispatch('addFoo', payload); // here `addFoo` is an event type that handles the `fooStore` above
+  } 
+};
+```
+
+
+## Fluce instance
+
+You start use Fluce by creating an instance of it. Normally you want only one instance in the Browser, but might want to create an instance for each request on server-side.
+
+```
+const fluce = createFluce();
+```
