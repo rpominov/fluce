@@ -36,7 +36,9 @@ Action creator in Fluce is a function that returns another function:
 let myAction = function(flux) {
   return function(some, args) {
     const payload = {some, args};
-    flux.dispatch('addFoo', payload); // here `addFoo` is an event type that handles the `fooStore` above
+    
+    // here `addFoo` is an event type that handles the `fooStore` above
+    flux.dispatch('addFoo', payload); 
   } 
 };
 ```
