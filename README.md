@@ -12,7 +12,7 @@ Well, Flux again ...
 
 ## Store
 
-Store in Fluce is just an object with shape `{initial: Function, reducers: {foo: Function, bar: Function, ...}}`, where `initial()` returns an intial state, and each of `reducers` is event handlers called with a current _state_ and the event _payload_ as arguments and return a new _state_. Each reducer must be a pure function, that never mutates current state, but returns a new one instead. A reducer's name (e.g. `foo` above) is an event type which that reducer handles.
+Store in Fluce is just an object with shape `{initial: Function, reducers: {foo: Function, bar: Function, ...}}`, where `initial()` returns an intial state, and each of `reducers` is event handlers called with a current _state_ and the event _payload_ as arguments and return a new _state_. Each reducer must be a pure function, that never mutate current state, but returns a new one instead. A reducer's name (e.g. `foo` above) is an event type that the reducer want to handle.
 
 ```js
 let fooStore = {
