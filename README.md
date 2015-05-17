@@ -1,5 +1,7 @@
 # Fluce
 
+[![Join the chat at https://gitter.im/pozadi/fluce](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pozadi/fluce?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 Well, Flux again ...
 
  - lib agnostic, but with helpers for React
