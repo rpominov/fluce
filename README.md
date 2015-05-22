@@ -1,27 +1,57 @@
+### Project status
+
+[![Join the chat at https://gitter.im/rpominov/fluce](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rpominov/fluce?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+WIP, currently we have only this doc (which is also WIP), and [a prototype](https://gist.github.com/pozadi/9e09a7c1228e813a40ef).
+
 # Fluce
+
+[![Join the chat at https://gitter.im/pozadi/fluce](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pozadi/fluce?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Well, Flux again ...
 
  - lib agnostic, but with helpers for React
  - forces to use immutable data structures in stores, or just never mutate
  - forces to use pure functions in stores
- - stores are just reducers of events to their state
+ - stores are just reducers of actions to their state
  - server-side ready
  - without singleton global flux object
+ 
+The name is combined from "flux" and "reduce".
  
 
 ## Store
 
-Store in Fluce is just an object with shape `{initial: Function, reducers: {foo: Function, bar: Function, ...}}`, where `initial()` returns an intial state, and each of `reducers` is event handlers called with a current _state_ and the event _payload_ as arguments and return a new _state_. Each reducer must be a pure function, that never mutate current state, but returns a new one instead. A reducer's name (e.g. `foo` above) is an event type that the reducer want to handle.
+Store in Fluce is just an object with the following shape:
 
 ```js
-let fooStore = {
+{
+  initial: Function, 
+  reducers: {
+    foo: Function, 
+    bar: Function, 
+    ...
+  }
+}
+``` 
+
+Where `initial()` returns an intial state, and each of `reducers` is an action 
+handler called with a current _state_ and the action's _payload_ as arguments 
+returning a new _state_. Each reducer must be a pure function, that never 
+mutate current state, but returns a new one instead. A reducer's name 
+(e.g. `foo` above) is the action type that the reducer want to handle.
+
+```js
+let myStore = {
   initial() {
-    return [];
+    return myInitialState;
   },
   reducers: {
-    addFoo(foos, newFoo) {
-      return foos.concat([newFoo]);
+    actionName1(currentStoreState, actionPayload) {
+      return computeNewState(currentStoreState, actionPayload);
+    },
+    actionName2(currentStoreState, actionPayload) {
+      /* ... */
     }
   }
 };
@@ -30,15 +60,13 @@ let fooStore = {
 
 ## Action creators
 
-Action creator in Fluce is a function that returns another function:
+Action creator in Fluce is a function that returns another function — the action creator itself:
 
 ```js
-let myAction = function(flux) {
-  return function(some, args) {
-    const payload = {some, args};
-    
-    // here `addFoo` is an event type that handles the `fooStore` above
-    flux.dispatch('addFoo', payload); 
+let myActionCreator = (fluce) => {
+  return (some, args) => {
+    // do something, call `fluce.dispatch()` eventually with the result
+    fluce.dispatch('actionName', payload); 
   } 
 };
 ```
@@ -46,8 +74,195 @@ let myAction = function(flux) {
 
 ## Fluce instance
 
-You start use Fluce by creating an instance of it. Normally you want only one instance in the Browser, but might want to create an instance for each request on server-side.
+You start use Fluce by creating an instance of it. Normally you want 
+only one instance in the browser, but might want to create an instance 
+for each request on server-side.
 
-```
+```js
 const fluce = createFluce();
+```
+
+When an instance created, you can add action creators and stores to it, 
+order in which you add them doesn't matter:
+
+```js
+fluce.addStore('storeName', myStore);
+fluce.addAction('actionCreatorName', myActionCreator);
+```
+
+After this done, you can access each store's current state as `fluce.stores.storeName`, 
+and call an action creator as `fluce.actions.actionCreatorName(some, args)`. 
+Also you can subscribe to changes of states:
+
+```js
+let unsubscribe = fluce.subscribe(['storeName1', 'storeName2'], (updatedStoresNames) => { 
+  // you can read new state directly from `fluce.stores.storeName`
+});
+
+// later...
+unsubscribe();
+```
+
+Callback is called when some of specified stores change their state (via a reducer).
+If two or more stores change in response to a single action, the callback will
+be called only once. Also if a reducer returns same state, the store will be considered not changed.
+
+## Example
+
+```js
+// Setup
+
+const fluce = createFluce();
+
+fluce.addStore('counter', {
+  initial() {
+    return 0;
+  },
+  reducers: {
+    counterAdd(cur, x) {
+      return cur + x;
+    },
+    counterSubtract(cur, x) {
+      return cur - x;
+    }
+  }
+});
+
+fluce.addStore('counterInverted', {
+  initial() {
+    return 0;
+  },
+  reducers: {
+    counterAdd(cur, x) {
+      return cur - x;
+    },
+    counterSubtract(cur, x) {
+      return cur + x;
+    }
+  }
+});
+
+fluce.addAction('counterAdd', (fluce) => {
+  return (x) => fluce.dispatch('counterAdd', x);
+});
+
+fluce.addAction('counterSubtract', (fluce) => {
+  return (x) => fluce.dispatch('counterSubtract', x);
+});
+
+
+// Usage
+
+console.log(fluce.stores.counter); // => 0
+console.log(fluce.stores.counterInverted); // => 0
+
+fluce.actions.counterAdd(10);
+
+console.log(fluce.stores.counter); // => 10
+console.log(fluce.stores.counterInverted); // => -10
+
+fluce.subscribe(['counter', 'counterInverted'], (updated) => {
+  console.log('following stores have updated:', updated);
+});
+
+fluce.actions.counterSubtract(5); 
+// => following stores have updated: ['counter', 'counterInverted']
+```
+
+## &lt;Fluce /&gt; React component
+
+`Fluce` is an helper component, you can use to subscribe to stores. 
+It outputs nothing but it's child component to the result DOM. 
+It can have only one child, and renders it with a bit of magic 
+(adds two more props to it).
+
+```js
+React.render(<Fluce fluce={fluce}>
+  <div>
+    <Fluce stores={['user']}>
+      <Header />
+    </Fluce>
+    <div>
+      <Fluce stores={['productsFilter']}>
+        <ProductsFilter />
+      </Fluce>
+      <Fluce stores={['products', 'productsFilter']}>
+        <ProductsList layout='cards' />
+      </Fluce>
+    </div>
+  </div>
+</Fluce>, document.getElementById('root'));
+```
+
+In this example `Header` will be rendered as 
+`<Header fluce={fluce} stores={{user: userStoreState}} />`. So you can access 
+stores' state, and the `fluce` instance from `this.props`. Same goes for 
+`ProductsFilter` and `ProductsList`, except `ProductsList` will also have 
+`layout` property, like so:
+
+```js
+<ProductsList layout='cards' fluce={fluce} stores={{
+  products: currentStateOfProductsStore,
+  productsFilter: currentStateOfProductsFilterStore
+}} />
+```
+
+Note: you need to provide `fluce` instance that will be used. You can pass it to 
+any instance of `Fluce` component, but normally you pass it only to one on top, 
+and others get it from there.
+
+Internally we use [context](https://facebook.github.io/react/blog/2014/03/28/the-road-to-1.0.html#context) 
+to pass `fluce` instance through components tree, and 
+[`React.addons.cloneWithProps`](http://facebook.github.io/react/docs/clone-with-props.html)
+to add props to child component.
+
+
+## Higher-order React components
+
+You can think of it like wrapping your component into &lt;Fluce /&gt; in advance.
+Learn more about 
+[Higher-order components as a pattern](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775).
+
+```js
+class UserBlock {
+  render() {
+    return <div>
+      Hi, {this.props.stores.user.name}!
+      <button onClick={() => this.fluce.actions.logout()}>logout</button>
+    </div>;
+  }
+}
+
+const UserBlockEnhanced = listenStores(['user'], UserBlock);
+
+// We still need to pass fluce instance somewhere, 
+// that's why top <Fluce> wrapper is still used.
+React.render(<Fluce fluce={fluce}>
+  ...
+  <UserBlockEnhanced />
+  ...
+<Fluce>, document.getElementById('root'))
+```
+
+## Optimistic dispatch
+
+Thanks to pure action handlers in stores we can support 
+optimistic dispatch of actions. An optimistic dispatch can be canceled, 
+in this case we simply roll back to the state before that action,
+and replay all actions except the canceled one.
+
+```js
+fluce.addAction('fooAdd', (fluce) => {
+  return (foo) => {
+    const action = fluce.optimisticallyDispatch('fooAdd', foo);
+    addFooOnServer(foo)
+      .then(
+        // To confirm an optimistic dispatch is as important as to cancel,
+        // because before it confirmed we have to collect
+        // all actions (with payloads) that comes after the action in question.
+        () => action.confirm(), 
+        () => action.cancel()
+      );
+  };
+});
 ```
