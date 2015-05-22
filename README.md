@@ -4,7 +4,7 @@ WIP, currently we have only this doc (which is also WIP), and [a prototype](http
 
 # Fluce
 
-[![Join the chat at https://gitter.im/pozadi/fluce](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pozadi/fluce?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![Join the chat at https://gitter.im/rpominov/fluce](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rpominov/fluce?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Well, Flux again ...
 
