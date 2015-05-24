@@ -4,6 +4,8 @@ WIP, currently we have only this doc (which is also WIP), and [a prototype](http
 
 # Fluce
 
+[![Dependency Status](https://david-dm.org/rpominov/fluce.svg)](https://david-dm.org/rpominov/fluce)
+[![devDependency Status](https://david-dm.org/rpominov/fluce/dev-status.svg)](https://david-dm.org/rpominov/fluce#info=devDependencies)
 [![Build Status](https://travis-ci.org/rpominov/fluce.svg)](https://travis-ci.org/rpominov/fluce)
 [![Join the chat at https://gitter.im/rpominov/fluce](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rpominov/fluce?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
