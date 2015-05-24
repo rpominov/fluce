@@ -4,6 +4,7 @@ WIP, currently we have only this doc (which is also WIP), and [a prototype](http
 
 # Fluce
 
+[![Build Status](https://travis-ci.org/rpominov/fluce.svg)](https://travis-ci.org/rpominov/fluce)
 [![Join the chat at https://gitter.im/rpominov/fluce](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/rpominov/fluce?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Well, Flux again ...
@@ -14,9 +15,9 @@ Well, Flux again ...
  - stores are just reducers of actions to their state
  - server-side ready
  - without singleton global flux object
- 
+
 The name is combined from "flux" and "reduce".
- 
+
 
 ## Store
 
@@ -24,19 +25,19 @@ Store in Fluce is just an object with the following shape:
 
 ```js
 {
-  initial: Function, 
+  initial: Function,
   reducers: {
-    foo: Function, 
-    bar: Function, 
+    foo: Function,
+    bar: Function,
     ...
   }
 }
-``` 
+```
 
-Where `initial()` returns an intial state, and each of `reducers` is an action 
-handler called with a current _state_ and the action's _payload_ as arguments 
-returning a new _state_. Each reducer must be a pure function, that never 
-mutate current state, but returns a new one instead. A reducer's name 
+Where `initial()` returns an intial state, and each of `reducers` is an action
+handler called with a current _state_ and the action's _payload_ as arguments
+returning a new _state_. Each reducer must be a pure function, that never
+mutate current state, but returns a new one instead. A reducer's name
 (e.g. `foo` above) is the action type that the reducer want to handle.
 
 ```js
@@ -64,23 +65,23 @@ Action creator in Fluce is a function that returns another function — the acti
 let myActionCreator = (fluce) => {
   return (some, args) => {
     // do something, call `fluce.dispatch()` eventually with the result
-    fluce.dispatch('actionName', payload); 
-  } 
+    fluce.dispatch('actionName', payload);
+  }
 };
 ```
 
 
 ## Fluce instance
 
-You start use Fluce by creating an instance of it. Normally you want 
-only one instance in the browser, but might want to create an instance 
+You start use Fluce by creating an instance of it. Normally you want
+only one instance in the browser, but might want to create an instance
 for each request on server-side.
 
 ```js
 const fluce = createFluce();
 ```
 
-When an instance created, you can add action creators and stores to it, 
+When an instance created, you can add action creators and stores to it,
 order in which you add them doesn't matter:
 
 ```js
@@ -88,12 +89,12 @@ fluce.addStore('storeName', myStore);
 fluce.addAction('actionCreatorName', myActionCreator);
 ```
 
-After this done, you can access each store's current state as `fluce.stores.storeName`, 
-and call an action creator as `fluce.actions.actionCreatorName(some, args)`. 
+After this done, you can access each store's current state as `fluce.stores.storeName`,
+and call an action creator as `fluce.actions.actionCreatorName(some, args)`.
 Also you can subscribe to changes of states:
 
 ```js
-let unsubscribe = fluce.subscribe(['storeName1', 'storeName2'], (updatedStoresNames) => { 
+let unsubscribe = fluce.subscribe(['storeName1', 'storeName2'], (updatedStoresNames) => {
   // you can read new state directly from `fluce.stores.storeName`
 });
 
@@ -163,15 +164,15 @@ fluce.subscribe(['counter', 'counterInverted'], (updated) => {
   console.log('following stores have updated:', updated);
 });
 
-fluce.actions.counterSubtract(5); 
+fluce.actions.counterSubtract(5);
 // => following stores have updated: ['counter', 'counterInverted']
 ```
 
 ## &lt;Fluce /&gt; React component
 
-`Fluce` is an helper component, you can use to subscribe to stores. 
-It outputs nothing but it's child component to the result DOM. 
-It can have only one child, and renders it with a bit of magic 
+`Fluce` is an helper component, you can use to subscribe to stores.
+It outputs nothing but it's child component to the result DOM.
+It can have only one child, and renders it with a bit of magic
 (adds two more props to it).
 
 ```js
@@ -192,10 +193,10 @@ React.render(<Fluce fluce={fluce}>
 </Fluce>, document.getElementById('root'));
 ```
 
-In this example `Header` will be rendered as 
-`<Header fluce={fluce} stores={{user: userStoreState}} />`. So you can access 
-stores' state, and the `fluce` instance from `this.props`. Same goes for 
-`ProductsFilter` and `ProductsList`, except `ProductsList` will also have 
+In this example `Header` will be rendered as
+`<Header fluce={fluce} stores={{user: userStoreState}} />`. So you can access
+stores' state, and the `fluce` instance from `this.props`. Same goes for
+`ProductsFilter` and `ProductsList`, except `ProductsList` will also have
 `layout` property, like so:
 
 ```js
@@ -205,12 +206,12 @@ stores' state, and the `fluce` instance from `this.props`. Same goes for
 }} />
 ```
 
-Note: you need to provide `fluce` instance that will be used. You can pass it to 
-any instance of `Fluce` component, but normally you pass it only to one on top, 
+Note: you need to provide `fluce` instance that will be used. You can pass it to
+any instance of `Fluce` component, but normally you pass it only to one on top,
 and others get it from there.
 
-Internally we use [context](https://facebook.github.io/react/blog/2014/03/28/the-road-to-1.0.html#context) 
-to pass `fluce` instance through components tree, and 
+Internally we use [context](https://facebook.github.io/react/blog/2014/03/28/the-road-to-1.0.html#context)
+to pass `fluce` instance through components tree, and
 [`React.addons.cloneWithProps`](http://facebook.github.io/react/docs/clone-with-props.html)
 to add props to child component.
 
@@ -218,7 +219,7 @@ to add props to child component.
 ## Higher-order React components
 
 You can think of it like wrapping your component into &lt;Fluce /&gt; in advance.
-Learn more about 
+Learn more about
 [Higher-order components as a pattern](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775).
 
 ```js
@@ -233,7 +234,7 @@ class UserBlock {
 
 const UserBlockEnhanced = listenStores(['user'], UserBlock);
 
-// We still need to pass fluce instance somewhere, 
+// We still need to pass fluce instance somewhere,
 // that's why top <Fluce> wrapper is still used.
 React.render(<Fluce fluce={fluce}>
   ...
@@ -244,8 +245,8 @@ React.render(<Fluce fluce={fluce}>
 
 ## Optimistic dispatch
 
-Thanks to pure action handlers in stores we can support 
-optimistic dispatch of actions. An optimistic dispatch can be canceled, 
+Thanks to pure action handlers in stores we can support
+optimistic dispatch of actions. An optimistic dispatch can be canceled,
 in this case we simply roll back to the state before that action,
 and replay all actions except the canceled one.
 
@@ -258,7 +259,7 @@ fluce.addAction('fooAdd', (fluce) => {
         // To confirm an optimistic dispatch is as important as to cancel,
         // because before it confirmed we have to collect
         // all actions (with payloads) that comes after the action in question.
-        () => action.confirm(), 
+        () => action.confirm(),
         () => action.cancel()
       );
   };
