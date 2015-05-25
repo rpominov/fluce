@@ -267,3 +267,38 @@ fluce.addAction('fooAdd', (fluce) => {
   };
 });
 ```
+
+
+## State update middleware
+
+When creating a Fluce instance you can provide a middleware that will be used
+to change default fluce behavior regarding update stores state. A middleware is
+a function that returns another function:
+
+```js
+const myMiddleware = (replaceState) => {
+  // The returned function will be called when fluce want to update its state.
+  // It is called with the state object that contains state of all stores,
+  // (the same object that is available as `fluce.stores`).
+  return (newState) => {
+    // Now you're in charge, and can decide if the state will be changed
+    // and to what value. To set the new state you should call the
+    // `replaceState` function. You can not call `replaceState` on a request
+    // from fluce, and you can also call it at any time you want. For instance,
+    // you can delay all changes like this:
+    setTimeout(() => replaceState(newState), 1000);
+  }
+}
+```
+
+A no op middleware is looks like this `(replaceState) => replaceState`,
+it won't change the default behavior.
+
+To set a middleware you need to pass it to `createFluce()` function:
+
+```js
+const fluce = createFluce(myMiddleware);
+```
+
+This feature allows you to implement advanced stuff like "time travelling" or "undo" from
+[this prototype](https://gist.github.com/gaearon/c02f3eb38724b64ab812) by @gaearon.
