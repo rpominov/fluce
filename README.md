@@ -281,7 +281,7 @@ const myMiddleware = (replaceState) => {
   // It is called with the state object that contains state of all stores,
   // (the same object that is available as `fluce.stores`).
   return (newState) => {
-    // Now you're in charge, and can decide if the state will be changed
+    // Now you're in charge, and can decide whether the state will be changed
     // and to what value. To set the new state you should call the
     // `replaceState` function. You can not call `replaceState` on a request
     // from fluce, and you can also call it at any time you want. For instance,
@@ -301,4 +301,5 @@ const fluce = createFluce(myMiddleware);
 ```
 
 This feature allows you to implement advanced stuff like "time travelling" or "undo" from
-[this prototype](https://gist.github.com/gaearon/c02f3eb38724b64ab812) by @gaearon.
+[this prototype](https://gist.github.com/gaearon/c02f3eb38724b64ab812) by
+[@gaearon](https://github.com/gaearon).
