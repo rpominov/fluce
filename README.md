@@ -88,7 +88,7 @@ order in which you add them doesn't matter:
 
 ```js
 fluce.addStore('storeName', myStore);
-fluce.addAction('actionCreatorName', myActionCreator);
+fluce.addActionCreator('actionCreatorName', myActionCreator);
 ```
 
 After this done, you can access each store's current state as `fluce.stores.storeName`,
@@ -143,11 +143,11 @@ fluce.addStore('counterInverted', {
   }
 });
 
-fluce.addAction('counterAdd', (fluce) => {
+fluce.addActionCreator('counterAdd', (fluce) => {
   return (x) => fluce.dispatch('counterAdd', x);
 });
 
-fluce.addAction('counterSubtract', (fluce) => {
+fluce.addActionCreator('counterSubtract', (fluce) => {
   return (x) => fluce.dispatch('counterSubtract', x);
 });
 
@@ -253,7 +253,7 @@ in this case we simply roll back to the state before that action,
 and replay all actions except the canceled one.
 
 ```js
-fluce.addAction('fooAdd', (fluce) => {
+fluce.addActionCreator('fooAdd', (fluce) => {
   return (foo) => {
     const action = fluce.optimisticallyDispatch('fooAdd', foo);
     addFooOnServer(foo)
