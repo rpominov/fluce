@@ -1,6 +1,6 @@
 ### Project status
 
-WIP, most of the features from this document are not implemented, see also [a prototype](https://gist.github.com/pozadi/9e09a7c1228e813a40ef).
+WIP, most of the features from this document are not implemented, see also [the prototype](https://gist.github.com/pozadi/9e09a7c1228e813a40ef).
 
 # Fluce
 
