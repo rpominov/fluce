@@ -6,7 +6,7 @@ import type {ReplaceState} from './types'
 
 
 export default function(replace: ReplaceState): ReplaceState {
-  var prevState = {}
+  var prevState = Object.create(null)
   return (newState) => {
     if (!shallowEq(prevState, newState)) {
       prevState = newState

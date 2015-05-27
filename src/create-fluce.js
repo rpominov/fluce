@@ -6,7 +6,6 @@ import {reduceAllStores} from './reduce'
 import type {ReplaceStateMiddleware, FluceInstance} from './types'
 
 
-// TODO: tests
 export default function(middleware: ReplaceStateMiddleware = (x => x)): FluceInstance {
 
   var stores = Object.create(null)

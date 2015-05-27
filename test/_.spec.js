@@ -4,37 +4,37 @@ import {shallowEq, shallowPropsDiff, assoc, hasIntersection} from '../src/_'
 
 describe('shallowEq', () => {
   it('should work', () => {
-    expect(shallowEq({}, {})).toBe(true);
-    expect(shallowEq({a: 1}, {})).toBe(false);
-    expect(shallowEq({}, {a: 1})).toBe(false);
-    expect(shallowEq({a: 2}, {a: 1})).toBe(false);
-    expect(shallowEq({a: 2}, {a: 2})).toBe(true);
-    expect(shallowEq({a: 2, b: 1}, {a: 2})).toBe(false);
-    expect(shallowEq({a: 2}, {a: 2, b: 1})).toBe(false);
-    expect(shallowEq({a: 2, b: 2}, {a: 2, b: 1})).toBe(false);
-    expect(shallowEq({a: 2, b: 2}, {a: 2, b: 2})).toBe(true);
+    expect(shallowEq({}, {})).toBe(true)
+    expect(shallowEq({a: 1}, {})).toBe(false)
+    expect(shallowEq({}, {a: 1})).toBe(false)
+    expect(shallowEq({a: 2}, {a: 1})).toBe(false)
+    expect(shallowEq({a: 2}, {a: 2})).toBe(true)
+    expect(shallowEq({a: 2, b: 1}, {a: 2})).toBe(false)
+    expect(shallowEq({a: 2}, {a: 2, b: 1})).toBe(false)
+    expect(shallowEq({a: 2, b: 2}, {a: 2, b: 1})).toBe(false)
+    expect(shallowEq({a: 2, b: 2}, {a: 2, b: 2})).toBe(true)
   })
 })
 
 describe('shallowPropsDiff', () => {
   it('should work', () => {
-    expect(shallowPropsDiff({}, {})).toEqual([]);
-    expect(shallowPropsDiff({a: 1}, {})).toEqual(['a']);
-    expect(shallowPropsDiff({}, {a: 1})).toEqual(['a']);
-    expect(shallowPropsDiff({a: 2}, {a: 1})).toEqual(['a']);
-    expect(shallowPropsDiff({a: 2}, {a: 2})).toEqual([]);
-    expect(shallowPropsDiff({a: 2, b: 1}, {a: 2})).toEqual(['b']);
-    expect(shallowPropsDiff({a: 2}, {a: 2, b: 1})).toEqual(['b']);
-    expect(shallowPropsDiff({a: 2, b: 2}, {a: 2, b: 1})).toEqual(['b']);
-    expect(shallowPropsDiff({a: 2, b: 2}, {a: 1, b: 1})).toEqual(['a', 'b']);
-    expect(shallowPropsDiff({a: 2, b: 2}, {a: 2, b: 2})).toEqual([]);
+    expect(shallowPropsDiff({}, {})).toEqual([])
+    expect(shallowPropsDiff({a: 1}, {})).toEqual(['a'])
+    expect(shallowPropsDiff({}, {a: 1})).toEqual(['a'])
+    expect(shallowPropsDiff({a: 2}, {a: 1})).toEqual(['a'])
+    expect(shallowPropsDiff({a: 2}, {a: 2})).toEqual([])
+    expect(shallowPropsDiff({a: 2, b: 1}, {a: 2})).toEqual(['b'])
+    expect(shallowPropsDiff({a: 2}, {a: 2, b: 1})).toEqual(['b'])
+    expect(shallowPropsDiff({a: 2, b: 2}, {a: 2, b: 1})).toEqual(['b'])
+    expect(shallowPropsDiff({a: 2, b: 2}, {a: 1, b: 1})).toEqual(['a', 'b'])
+    expect(shallowPropsDiff({a: 2, b: 2}, {a: 2, b: 2})).toEqual([])
   })
 })
 
 describe('assoc', () => {
   it('should not mutate', () => {
-    var map = {};
-    expect(assoc('a', 1, {})).not.toBe(map);
+    var map = {}
+    expect(assoc('a', 1, {})).not.toBe(map)
   })
   it('result\'s prototype should be null', () => {
     expect(assoc('a', 1, {}).toString).toBe(undefined)
