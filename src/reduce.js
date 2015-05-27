@@ -1,12 +1,6 @@
 /* @flow */
 
-import type {Store} from './types'
-
-
-type Action = {type: string; payload: any}
-type Stores = {[key: string]: Store}
-type StoreStates = {[key: string]: any}
-
+import type {Store, Action, Stores, StoreStates} from './types'
 
 
 var noopReducer = (state, payload) => state

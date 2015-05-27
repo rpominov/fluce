@@ -3,17 +3,8 @@
 import skipDuplicates from './skip-duplicates'
 import {shallowPropsDiff, assign, hasIntersection} from './_'
 import {reduceAllStores} from './reduce'
-import type {ReplaceStateMiddleware, Store} from './types'
+import type {ReplaceStateMiddleware, FluceInstance} from './types'
 
-
-type FluceInstance = {
-  stores: {[key: string]: any},
-  actions: {[key: string]: Function},
-  addStore(name: string, store: Store): void,
-  addActionCreator(name: string, getCreator: (fluce: FluceInstance) => Function): void,
-  dispatch(type: string, payload: any): void,
-  subscribe(stores: Array<string>, callback: (updatedStores: Array<string>) => void): () => void
-}
 
 // TODO: tests
 export function createFlux(middleware: ReplaceStateMiddleware = (x => x)): FluceInstance {

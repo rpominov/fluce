@@ -1,6 +1,6 @@
 /* @flow */
 
-type map = {[key: string]: any}
+import type {map} from './types'
 
 export function shallowEq(a: map, b: map): boolean {
   var keysA = Object.keys(a)
