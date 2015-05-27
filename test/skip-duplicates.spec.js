@@ -1,13 +1,15 @@
 /* @flow */
 
-import skipDuplicates from '../src/skip-duplicates-middleware'
+import skipDuplicates from '../src/skip-duplicates'
 
 
 
 describe('skipDuplicatesMiddleware', () => {
+
   it('should return function', () => {
     expect(typeof skipDuplicates(x => undefined)).toBe('function')
   })
+
   it('should work as expected', () => {
     var count = 0
     var curState = {}
@@ -41,4 +43,5 @@ describe('skipDuplicatesMiddleware', () => {
     expect(count).toBe(4)
     expect(curState).toEqual({b: 1})
   })
+
 })

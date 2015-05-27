@@ -1,6 +1,6 @@
 /* @flow */
 
-import {shallowEq, shallowPropsDiff, assign} from '../src/_'
+import {shallowEq, shallowPropsDiff, assign, hasIntersection} from '../src/_'
 
 describe('shallowEq', () => {
   it('should work', () => {
@@ -43,5 +43,17 @@ describe('assign', () => {
     expect(assign('a', 1, {}).a).toBe(1)
     expect(assign('a', 1, {a: 0}).a).toBe(1)
     expect(assign('a', 1, {b: 0}).b).toBe(0)
+  })
+})
+
+describe('hasIntersection', () => {
+  it('should work', () => {
+    expect(hasIntersection([], [])).toBe(false)
+    expect(hasIntersection([1], [])).toBe(false)
+    expect(hasIntersection([], [1])).toBe(false)
+    expect(hasIntersection([1], [1])).toBe(true)
+    expect(hasIntersection([1], [2])).toBe(false)
+    expect(hasIntersection([1], [2, 1])).toBe(true)
+    expect(hasIntersection([2, 1], [1])).toBe(true)
   })
 })

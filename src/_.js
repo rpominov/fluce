@@ -41,12 +41,22 @@ export function shallowPropsDiff(a: map, b: map): Array<string> {
 }
 
 export function assign(key: string, value: any, source: map): map {
-  var keys = Object.keys(source);
-  var result = Object.create(null);
+  var keys = Object.keys(source)
+  var result = Object.create(null)
   var i
   for (i = 0; i < keys.length; i++) {
-    result[keys[i]] = source[keys[i]];
+    result[keys[i]] = source[keys[i]]
   }
-  result[key] = value;
-  return result;
+  result[key] = value
+  return result
+}
+
+export function hasIntersection(smaller: Array<any>, bigger: Array<any>): boolean {
+  var i
+  for (i = 0; i < smaller.length; i++) {
+    if (bigger.indexOf(smaller[i]) !== -1) {
+      return true
+    }
+  }
+  return false
 }
