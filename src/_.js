@@ -40,7 +40,7 @@ export function shallowPropsDiff(a: map, b: map): Array<string> {
   return diff
 }
 
-export function assign(key: string, value: any, source: map): map {
+export function assoc(key: string, value: any, source: map): map {
   var keys = Object.keys(source)
   var result = Object.create(null)
   var i

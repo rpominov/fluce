@@ -1,6 +1,6 @@
 /* @flow */
 
-import {shallowEq, shallowPropsDiff, assign, hasIntersection} from '../src/_'
+import {shallowEq, shallowPropsDiff, assoc, hasIntersection} from '../src/_'
 
 describe('shallowEq', () => {
   it('should work', () => {
@@ -31,18 +31,18 @@ describe('shallowPropsDiff', () => {
   })
 })
 
-describe('assign', () => {
+describe('assoc', () => {
   it('should not mutate', () => {
     var map = {};
-    expect(assign('a', 1, {})).not.toBe(map);
+    expect(assoc('a', 1, {})).not.toBe(map);
   })
   it('result\'s prototype should be null', () => {
-    expect(assign('a', 1, {}).toString).toBe(undefined)
+    expect(assoc('a', 1, {}).toString).toBe(undefined)
   })
   it('should work', () => {
-    expect(assign('a', 1, {}).a).toBe(1)
-    expect(assign('a', 1, {a: 0}).a).toBe(1)
-    expect(assign('a', 1, {b: 0}).b).toBe(0)
+    expect(assoc('a', 1, {}).a).toBe(1)
+    expect(assoc('a', 1, {a: 0}).a).toBe(1)
+    expect(assoc('a', 1, {b: 0}).b).toBe(0)
   })
 })
 

@@ -1,19 +1,19 @@
 /* @flow */
 
 import skipDuplicates from './skip-duplicates'
-import {shallowPropsDiff, assign, hasIntersection} from './_'
+import {shallowPropsDiff, assoc, hasIntersection} from './_'
 import {reduceAllStores} from './reduce'
 import type {ReplaceStateMiddleware, FluceInstance} from './types'
 
 
 // TODO: tests
-export function createFlux(middleware: ReplaceStateMiddleware = (x => x)): FluceInstance {
+export default function(middleware: ReplaceStateMiddleware = (x => x)): FluceInstance {
 
   var stores = Object.create(null)
   var listeners = []
 
   function addStore(name, store) {
-    replaceState(assign('name', store.initial(), fluce.stores))
+    replaceState(assoc(name, store.initial(), fluce.stores))
     stores[name] = store
   }
 
