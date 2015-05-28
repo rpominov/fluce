@@ -268,7 +268,7 @@ fluce.addActionCreator('fooAdd', (fluce) => {
 });
 ```
 
-
+<!--
 ## State update middleware
 
 When creating a Fluce instance you can provide a middleware that will be used
@@ -303,3 +303,4 @@ const fluce = createFluce(myMiddleware);
 This feature allows you to implement advanced stuff like "time travelling" or "undo" from
 [this prototype](https://gist.github.com/gaearon/c02f3eb38724b64ab812) by
 [@gaearon](https://github.com/gaearon).
+-->
