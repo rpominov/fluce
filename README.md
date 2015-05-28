@@ -247,7 +247,7 @@ React.render(<Fluce fluce={fluce}>
 
 ## Optimistic dispatch
 
-Thanks to pure action handlers in stores we can support
+Thanks to pure action handlers we can support
 optimistic dispatch of actions. An optimistic dispatch can be canceled,
 in this case we simply roll back to the state before that action,
 and replay all actions except the canceled one.
