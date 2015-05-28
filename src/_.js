@@ -60,3 +60,19 @@ export function hasIntersection(smaller: Array<any>, bigger: Array<any>): boolea
   }
   return false
 }
+
+
+type Comparator<T> = (a: T, b: T) => boolean
+type Callback<T> = (x: T) => void
+
+export function skipDuplicates<T>(comp: Comparator<T>, cb: Callback<T>): Callback<T> {
+  var hasPrev = false
+  var prevX
+  return (x) => {
+    if (!hasPrev || !comp((prevX: any), x)) {
+      hasPrev = true
+      prevX = x
+      cb(x)
+    }
+  }
+}

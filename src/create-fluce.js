@@ -1,12 +1,11 @@
 /* @flow */
 
-import skipDuplicates from './skip-duplicates'
-import {shallowPropsDiff, assoc, hasIntersection} from './_'
+import {shallowPropsDiff, assoc, hasIntersection, skipDuplicates, shallowEq} from './_'
 import {reduceAllStores} from './reduce'
 import type {ReplaceStateMiddleware, FluceInstance} from './types'
 
 
-export default function(middleware: ReplaceStateMiddleware = (x => x)): FluceInstance {
+export default function(): FluceInstance {
 
   var stores = Object.create(null)
   var listeners = []
@@ -49,11 +48,12 @@ export default function(middleware: ReplaceStateMiddleware = (x => x)): FluceIns
     subscribe
   }
 
-  var replaceState = middleware(skipDuplicates((newState) => {
+
+  var replaceState = skipDuplicates(shallowEq, (newState) => {
     var undatedStores = shallowPropsDiff(fluce.stores, newState)
     fluce.stores = newState
     notify(undatedStores)
-  }))
+  })
 
   return fluce
 }
