@@ -64,6 +64,14 @@ describe('createFluce', () => {
       fluce.dispatch('foo', 1)
       expect(log).toEqual([['counter', 'counter2', 'counter3'], ['counter', 'counter3']])
     })
+    it('listeners shouldn\'t be notified if state doesn\'t change', () => {
+      var log = []
+      var fluce = createFluce()
+      fluce.addStore('counter', storeCounter)
+      fluce.subscribe(['counter'], (updated) => {log.push(updated)})
+      fluce.dispatch('add', 0)
+      expect(log).toEqual([])
+    })
   })
 
 })

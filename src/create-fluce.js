@@ -1,6 +1,6 @@
 /* @flow */
 
-import {shallowPropsDiff, assoc, hasIntersection, skipDuplicates, shallowEq} from './_'
+import {shallowPropsDiff, assoc, hasIntersection, shallowEq} from './_'
 import {reduceAllStores} from './reduce'
 import type {ReplaceStateMiddleware, FluceInstance} from './types'
 
@@ -31,6 +31,14 @@ export default function(): FluceInstance {
     }
   }
 
+  function replaceState(newState) {
+    if (!shallowEq(fluce.stores, newState)) {
+      var updatedStores = shallowPropsDiff(fluce.stores, newState)
+      fluce.stores = newState
+      notify(updatedStores)
+    }
+  }
+
   function notify(updatedStores) {
     listeners.forEach(listener => {
       if (hasIntersection(updatedStores, listener.stores)) {
@@ -47,13 +55,6 @@ export default function(): FluceInstance {
     dispatch,
     subscribe
   }
-
-
-  var replaceState = skipDuplicates(shallowEq, (newState) => {
-    var undatedStores = shallowPropsDiff(fluce.stores, newState)
-    fluce.stores = newState
-    notify(undatedStores)
-  })
 
   return fluce
 }
