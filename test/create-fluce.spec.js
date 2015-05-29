@@ -1,8 +1,7 @@
 /* @flow */
 
 import createFluce from '../src/create-fluce'
-import {storeCounter, storeCounter2, counterStores,
-  actionAdd5, actionSubtract7, actionMult2, acAdd} from './fixtures'
+import {storeCounter, storeCounter2} from './fixtures'
 
 describe('createFluce', () => {
 
@@ -40,15 +39,31 @@ describe('createFluce', () => {
   })
 
   describe('.dispatch', () => {
-    // TODO
+    it('should update stores state', () => {
+      var fluce = createFluce()
+      fluce.addStore('counter', storeCounter)
+      fluce.addStore('counter2', storeCounter2)
+      fluce.dispatch('add', 1)
+      expect(fluce.stores.counter).toBe(1)
+      expect(fluce.stores.counter2).toBe(-1)
+    })
   })
 
   describe('.subscribe', () => {
-    // TODO
-  })
-
-  describe('middleware', () => {
-    // TODO
+    it('listeners should be notified', () => {
+      var log = []
+      var fluce = createFluce()
+      fluce.addStore('counter', storeCounter)
+      fluce.addStore('counter2', storeCounter2)
+      fluce.addStore('counter3', storeCounter)
+      fluce.subscribe(['counter', 'counter2'], (updated) => {log.push(updated)})
+      fluce.dispatch('add', 1)
+      expect(log).toEqual([['counter', 'counter2', 'counter3']])
+      fluce.dispatch('subtract', 1)
+      expect(log).toEqual([['counter', 'counter2', 'counter3'], ['counter', 'counter3']])
+      fluce.dispatch('foo', 1)
+      expect(log).toEqual([['counter', 'counter2', 'counter3'], ['counter', 'counter3']])
+    })
   })
 
 })
