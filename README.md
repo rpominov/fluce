@@ -1,7 +1,3 @@
-### Project status
-
-WIP, most of the features from this document are not implemented, see also [the prototype](https://gist.github.com/pozadi/9e09a7c1228e813a40ef).
-
 # Fluce
 
 [![Dependency Status](https://david-dm.org/rpominov/fluce.svg)](https://david-dm.org/rpominov/fluce)
@@ -169,6 +165,11 @@ fluce.subscribe(['counter', 'counterInverted'], (updated) => {
 fluce.actions.counterSubtract(5);
 // => following stores have updated: ['counter', 'counterInverted']
 ```
+
+
+# In progress
+
+Following features are in progress.
 
 ## &lt;Fluce /&gt; React component
 
