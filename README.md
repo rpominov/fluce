@@ -12,7 +12,7 @@ Well, Flux again ...
  - forces to use pure functions in stores
  - stores are just reducers of actions to their state
  - server-side ready
- - without singleton global flux object
+ - without singletons
 
 The name is combined from "flux" and "reduce".
 
@@ -32,8 +32,8 @@ Store in Fluce is just an object with the following shape:
 }
 ```
 
-Where `initial()` returns an intial state, and each of `reducers` is an action
-handler called with a current _state_ and the action's _payload_ as arguments
+Where `initial()` returns an initial _state_, and each of `reducers` is an action
+handler called with the current _state_ and the action's _payload_ as arguments
 returning a new _state_. Each reducer must be a pure function, that never
 mutate current state, but returns a new one instead. A reducer's name
 (e.g. `foo` above) is the action type that the reducer want to handle.
@@ -72,14 +72,14 @@ let myActionCreator = (fluce) => {
 ## Fluce instance
 
 You start use Fluce by creating an instance of it. Normally you want
-only one instance in the browser, but might want to create an instance
-for each request on server-side.
+only one instance in the browser, but may want to create an instance
+for each request on the server.
 
 ```js
 const fluce = createFluce();
 ```
 
-When an instance created, you can add action creators and stores to it,
+When an instance created, you can add stores and action creators to it,
 order in which you add them doesn't matter:
 
 ```js
@@ -102,7 +102,8 @@ unsubscribe();
 
 Callback is called when some of specified stores change their state (via a reducer).
 If two or more stores change in response to a single action, the callback will
-be called only once. Also if a reducer returns same state, the store will be considered not changed.
+be called only once. Also if a reducer returns same state, the store will be
+considered not changed.
 
 ## Example
 
@@ -169,13 +170,13 @@ fluce.actions.counterSubtract(5);
 
 # In progress
 
-Following features are in progress.
+The features below aren't done yet.
 
 ## &lt;Fluce /&gt; React component
 
 `Fluce` is an helper component, you can use to subscribe to stores.
 It outputs nothing but it's child component to the result DOM.
-It can have only one child, and renders it with a bit of magic
+It can have only one child, and renders it with a bit of a magic
 (adds two more props to it).
 
 ```js
