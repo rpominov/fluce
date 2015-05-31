@@ -17,6 +17,17 @@ Well, Flux again ...
 The name is combined from "flux" and "reduce".
 
 
+## Installation
+
+```
+$ npm install fluce
+```
+
+```js
+const createFluce = require('fluce/create-fluce')
+```
+
+
 ## Store
 
 Store in Fluce is just an object with the following shape:
