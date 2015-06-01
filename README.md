@@ -231,7 +231,7 @@ to pass `fluce` instance through components tree, and
 to add props to child component.
 
 
-## Higher-order React components
+## Higher-order React component
 
 You can think of it like wrapping your component into &lt;Fluce /&gt; in advance.
 Learn more about
