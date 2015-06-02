@@ -68,7 +68,7 @@ let myStore = {
 
 ## Action creators
 
-Action creator in Fluce is a function that returns another function — the action creator itself:
+Action creator in Fluce is a function that takes a Fluce instance and returns another function — the action creator itself:
 
 ```js
 let myActionCreator = (fluce) => {
@@ -227,7 +227,7 @@ and others get it from there.
 
 Internally we use [context](https://facebook.github.io/react/blog/2014/03/28/the-road-to-1.0.html#context)
 to pass `fluce` instance through components tree, and
-[`React.cloneElement`](http://facebook.github.io/react/docs/top-level-api.html#react.cloneelement)
+[`React.addons.cloneWithProps`](https://facebook.github.io/react/docs/clone-with-props.html)
 to add props to child component.
 
 
