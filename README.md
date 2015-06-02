@@ -24,7 +24,7 @@ $ npm install fluce
 ```
 
 ```js
-const createFluce = require('fluce/create-fluce')
+const createFluce = require('fluce/create-fluce');
 ```
 
 
@@ -227,7 +227,7 @@ and others get it from there.
 
 Internally we use [context](https://facebook.github.io/react/blog/2014/03/28/the-road-to-1.0.html#context)
 to pass `fluce` instance through components tree, and
-[`React.addons.cloneWithProps`](http://facebook.github.io/react/docs/clone-with-props.html)
+[`React.cloneElement`](http://facebook.github.io/react/docs/top-level-api.html#react.cloneelement)
 to add props to child component.
 
 

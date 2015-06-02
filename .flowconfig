@@ -1,5 +1,6 @@
 [ignore]
-.*/node_modules
+.*/enhanced-resolve/test/fixtures/node_modules/invalidPackageJson
+.*/phantomjs/node_modules/npmconf/test/fixtures/package.json
 .*/npm-pkg
 
 [include]

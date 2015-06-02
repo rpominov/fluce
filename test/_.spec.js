@@ -1,6 +1,6 @@
 /* @flow */
 
-import {shallowEq, shallowPropsDiff, assoc, hasIntersection, skipDuplicates} from '../src/_'
+import {shallowEq, shallowPropsDiff, assoc, hasIntersection} from '../src/_'
 
 describe('shallowEq', () => {
   it('should work', () => {
