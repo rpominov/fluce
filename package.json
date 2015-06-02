@@ -30,9 +30,10 @@
     "karma-cli": "0.0.4",
     "karma-firefox-launcher": "^0.1.6",
     "karma-jasmine": "^0.3.5",
-    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-phantomjs-launcher": "^0.2.0",
     "karma-webpack": "^1.5.1",
     "node-libs-browser": "^0.5.2",
+    "phantomjs": "^1.9.17",
     "react": "^0.13.3",
     "webpack": "^1.9.9"
   }
