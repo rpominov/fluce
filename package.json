@@ -4,7 +4,7 @@
   "description": "Flux with immutable data and pure action handlers",
   "main": "index.js",
   "scripts": {
-    "test": "karma start --single-run --browsers PhantomJS"
+    "test": "karma start --browsers Firefox --single-run"
   },
   "repository": {
     "type": "git",
@@ -28,6 +28,7 @@
     "karma": "^0.12.32",
     "karma-chrome-launcher": "^0.1.12",
     "karma-cli": "0.0.4",
+    "karma-firefox-launcher": "^0.1.6",
     "karma-jasmine": "^0.3.5",
     "karma-phantomjs-launcher": "^0.1.4",
     "karma-webpack": "^1.5.1",
