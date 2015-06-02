@@ -36,9 +36,5 @@ describe('<Fluce />', () => {
     expect(result.props).toEqual({foo: 'bar', fluce})
   })
 
-  it('This should fail', () => {
-    expect(1).toBe(2)
-  })
-
 
 })
