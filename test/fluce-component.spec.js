@@ -55,6 +55,7 @@ describe('<Fluce/>', () => {
       }
     }
 
+    // Here `fluce` also passed through props, so I'm not sure what works
     it('... without wrapper', () => {
       expect(renderToHtml(
         <Fluce fluce={fluce}>
