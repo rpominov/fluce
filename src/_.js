@@ -60,3 +60,25 @@ export function hasIntersection(smaller: Array<any>, bigger: Array<any>): boolea
   }
   return false
 }
+
+export function pick(keys: Array<string>, source: map): map {
+  var result = Object.create(null)
+  var i
+  for (i = 0; i < keys.length; i++) {
+    result[keys[i]] = source[keys[i]]
+  }
+  return result
+}
+
+export function eqArrays(a: Array<any>, b: Array<any>): boolean {
+  var i
+  if (a.length !== b.length) {
+    return false
+  }
+  for (i = 0; i < a.length; i++) {
+    if (a[i] !== b[i]) {
+      return false
+    }
+  }
+  return true
+}

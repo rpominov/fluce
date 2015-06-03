@@ -1,6 +1,6 @@
 /* @flow */
 
-import {shallowEq, shallowPropsDiff, assoc, hasIntersection} from '../src/_'
+import {shallowEq, shallowPropsDiff, assoc, hasIntersection, pick, eqArrays} from '../src/_'
 
 describe('shallowEq', () => {
   it('should work', () => {
@@ -55,5 +55,27 @@ describe('hasIntersection', () => {
     expect(hasIntersection([1], [2])).toBe(false)
     expect(hasIntersection([1], [2, 1])).toBe(true)
     expect(hasIntersection([2, 1], [1])).toBe(true)
+  })
+})
+
+describe('pick', () => {
+  it('should work', () => {
+    var result: any = Object.create(null)
+    result.a = 1
+    result.b = 2
+    result.c = undefined
+    expect(pick(['a', 'b', 'c'], {a: 1, b: 2, d: 3, e: 4})).toEqual(result)
+  })
+})
+
+describe('eqArrays', () => {
+  it('should work', () => {
+    expect(eqArrays([], [])).toBe(true)
+    expect(eqArrays([1], [])).toBe(false)
+    expect(eqArrays([], [1])).toBe(false)
+    expect(eqArrays([1], [1])).toBe(true)
+    expect(eqArrays([1, 2], [1])).toBe(false)
+    expect(eqArrays([1], [1, 2])).toBe(false)
+    expect(eqArrays([1, 2], [1, 2])).toBe(true)
   })
 })
