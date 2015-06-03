@@ -3,14 +3,60 @@
 
 import React from 'react/addons'
 import {FluceInstance} from './types'
+import {pick, eqArrays} from './_'
 
 
 class Fluce extends React.Component {
+
+  _unsubscribe: ?Function;
+
+  constructor(props: {}) {
+    super(props)
+    this.state = {
+      partialStoresState: Object.create(null)
+    }
+  }
 
   componentWillMount() {
     if (!this.getFluce()) {
       throw new Error('Could not find `fluce` on `this.props` or `this.context` of <Fluce />')
     }
+    this.updateLocalState()
+    this.subscribe(this.props.stores || [])
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe()
+  }
+
+  componentWillReceiveProps(nextProps: {stores: ?Array<string>}) {
+    var curStores = this.props.stores || []
+    var nextStores = nextProps.stores || []
+
+    if (!eqArrays(curStores, nextStores)) {
+      this.unsubscribe()
+      this.subscribe(nextStores)
+    }
+  }
+
+  subscribe(stores: Array<string>) {
+    if (stores.length > 0) {
+      this._unsubscribe = this.getFluce().subscribe(stores, this.updateLocalState.bind(this))
+    }
+  }
+
+  unsubscribe() {
+    if (this._unsubscribe) {
+      this._unsubscribe()
+      this._unsubscribe = undefined
+    }
+  }
+
+  updateLocalState() {
+    var fluce = this.getFluce()
+    this.setState({
+      partialStoresState: pick(this.props.stores || [], fluce.stores)
+    })
   }
 
   render(): ReactElement {
@@ -29,7 +75,8 @@ class Fluce extends React.Component {
 
   getChildProps(): {} {
     return {
-      fluce: this.getFluce()
+      fluce: this.getFluce(),
+      stores: this.state.partialStoresState
     }
   }
 
@@ -42,7 +89,8 @@ class Fluce extends React.Component {
 }
 
 Fluce.propsTypes = {
-  fluce: React.PropTypes.object
+  fluce: React.PropTypes.object,
+  stores: React.PropTypes.array
 }
 
 Fluce.contextTypes = {
