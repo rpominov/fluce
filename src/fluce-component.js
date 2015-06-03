@@ -18,6 +18,8 @@ class Fluce extends React.Component {
   }
 
   wrapChild(child: ReactElement): ReactElement {
+    // `React.cloneElement` doesn't preserve `context`.
+    // See https://github.com/facebook/react/issues/4008
     return React.addons.cloneWithProps(child, this.getChildProps())
   }
 

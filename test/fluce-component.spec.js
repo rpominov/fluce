@@ -65,8 +65,20 @@ describe('<Fluce/>', () => {
         </Fluce>
       )).toBe('<div>123</div>')
     })
+    it('... all in wrapper', () => {
+      class Wrap extends React.Component {
+        render() {
+          return <Fluce fluce={fluce}>
+            <Fluce>
+              <Test/>
+            </Fluce>
+          </Fluce>
+        }
+      }
+      expect(renderToHtml(<Wrap/>)).toBe('<div>123</div>')
+    })
 
-    // This doesn't work
+    // This doesn't work in React 0.13, but will on 0.14
     //
     // it('... without wrapper, one layer deeper', () => {
     //   expect(renderToHtml(
@@ -78,6 +90,20 @@ describe('<Fluce/>', () => {
     //       </div>
     //     </Fluce>
     //   )).toBe('<div><div>123</div></div>')
+    // })
+    // it('... all in wrapper, one layer deeper', () => {
+    //   class Wrap extends React.Component {
+    //     render() {
+    //       return <Fluce fluce={fluce}>
+    //         <div>
+    //           <Fluce>
+    //             <Test/>
+    //           </Fluce>
+    //         </div>
+    //       </Fluce>
+    //     }
+    //   }
+    //   expect(renderToHtml(<Wrap/>)).toBe('<div><div>123</div></div>')
     // })
 
     it('... in a wrapper', () => {

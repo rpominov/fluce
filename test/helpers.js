@@ -11,13 +11,13 @@ export function withDOM<T>(cb: (el: Element) => T): T {
   return result
 }
 
-export function clearReactedHtml(html: string): string {
+export function cleanHtml(html: string): string {
   return html.replace(/ data\-reactid=".*?"/g, '')
 }
 
 export function renderToHtml(tree: ReactElement): string {
   return withDOM(el => {
     React.render(tree, el)
-    return clearReactedHtml(el.innerHTML)
+    return cleanHtml(el.innerHTML)
   })
 }
