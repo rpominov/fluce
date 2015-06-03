@@ -53,7 +53,12 @@ export default function(): FluceInstance {
     addStore,
     addActionCreator,
     dispatch,
-    subscribe
+    subscribe,
+
+    // for testing
+    _countListeners() {
+      return listeners.length
+    }
   }
 
   return fluce

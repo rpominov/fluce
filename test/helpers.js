@@ -21,3 +21,17 @@ export function renderToHtml(tree: ReactElement): string {
     return cleanHtml(el.innerHTML)
   })
 }
+
+
+type map = {[key: string]: any}
+
+// Converts Object({...}) to null({...})
+export function removeProto(source: map): map {
+  var result = Object.create(null)
+  var keys = Object.keys(source)
+  var i
+  for (i = 0; i < keys.length; i++) {
+    result[keys[i]] = source[keys[i]]
+  }
+  return result
+}
