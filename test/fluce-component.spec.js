@@ -8,7 +8,7 @@ var {createRenderer} = TestUtils
 import Fluce from '../src/fluce-component'
 import createFluce from '../src/create-fluce'
 
-import {renderToHtml, removeProto} from './helpers'
+import {withDOM, cleanHtml, renderToHtml, removeProto} from './helpers'
 import {storeCounter, storeCounter2} from './fixtures'
 
 
@@ -145,16 +145,19 @@ describe('<Fluce/>', () => {
     var fluce = createFluce()
     fluce.addStore('counter', storeCounter)
     fluce.addStore('counter2', storeCounter2)
-    fluce.addStore('whatToListen', {
-      initial() {
-        return ['counter']
-      },
-      reducers: {
-        whatToListenUpdate(_, next) {
-          return next
-        }
-      }
-    })
+    fluce.addStore('counter3', storeCounter)
+    fluce.addStore('counter4', storeCounter2)
+
+    // fluce.addStore('whatToListen', {
+    //   initial() {
+    //     return ['counter']
+    //   },
+    //   reducers: {
+    //     whatToListenUpdate(_, next) {
+    //       return next
+    //     }
+    //   }
+    // })
 
     it('should pass initial state', () => {
       var renderer = createRenderer()
@@ -168,6 +171,7 @@ describe('<Fluce/>', () => {
       renderer.render(<Fluce fluce={fluce} stores={['counter', 'counter2']}><div/></Fluce>)
       fluce.dispatch('add', 10)
       expect(renderer.getRenderOutput().props.stores).toEqual(removeProto({counter: 10, counter2: -10}))
+      fluce.dispatch('add', -10)
       renderer.unmount()
     })
 
@@ -181,7 +185,38 @@ describe('<Fluce/>', () => {
       expect([countBefore, countAfter, countAfter2]).toEqual([0, 1, 0])
     })
 
-    // TODO: should respect change of `stores` prop
+    it('should respect change of `stores` prop', () => {
+      var renderer = createRenderer()
+      renderer.render(<Fluce fluce={fluce} stores={['counter', 'counter2']}><div/></Fluce>)
+      renderer.render(<Fluce fluce={fluce} stores={['counter']}><div/></Fluce>)
+      expect(renderer.getRenderOutput().props.stores).toEqual(removeProto({counter: 0}))
+      renderer.unmount()
+    })
+
+    it('should respect change of `stores` prop (should re-subscribe)', () => {
+      var renderer = createRenderer()
+      renderer.render(<Fluce fluce={fluce} stores={['counter']}><div/></Fluce>)
+      renderer.render(<Fluce fluce={fluce} stores={['counter', 'counter2']}><div/></Fluce>)
+      fluce.dispatch('add', 10)
+      expect(renderer.getRenderOutput().props.stores).toEqual(removeProto({counter: 10, counter2: -10}))
+      fluce.dispatch('add', -10)
+      renderer.unmount()
+      expect(fluce._countListeners()).toBe(0)
+    })
+
+    it('should respect change of `stores` prop (real DOM)', () => {
+      class PrintStores extends React.Component {
+        render() {
+          return <div>{JSON.stringify(this.props.stores)}</div>
+        }
+      }
+      withDOM(el => {
+        React.render(<Fluce fluce={fluce} stores={['counter', 'counter2']}><PrintStores/></Fluce>, el)
+        expect(cleanHtml(el.innerHTML)).toBe('<div>{"counter":0,"counter2":0}</div>')
+        React.render(<Fluce fluce={fluce} stores={['counter']}><PrintStores/></Fluce>, el)
+        expect(cleanHtml(el.innerHTML)).toBe('<div>{"counter":0}</div>')
+      })
+    })
 
   })
 

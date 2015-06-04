@@ -21,8 +21,8 @@ class Fluce extends React.Component {
     if (!this.getFluce()) {
       throw new Error('Could not find `fluce` on `this.props` or `this.context` of <Fluce />')
     }
-    this.updateLocalState()
     this.subscribe(this.props.stores || [])
+    this.updateLocalState(this.props.stores || [])
   }
 
   componentWillUnmount() {
@@ -36,12 +36,13 @@ class Fluce extends React.Component {
     if (!eqArrays(curStores, nextStores)) {
       this.unsubscribe()
       this.subscribe(nextStores)
+      this.updateLocalState(nextStores)
     }
   }
 
   subscribe(stores: Array<string>) {
     if (stores.length > 0) {
-      this._unsubscribe = this.getFluce().subscribe(stores, this.updateLocalState.bind(this))
+      this._unsubscribe = this.getFluce().subscribe(stores, () => this.updateLocalState(stores))
     }
   }
 
@@ -52,10 +53,10 @@ class Fluce extends React.Component {
     }
   }
 
-  updateLocalState() {
+  updateLocalState(stores) {
     var fluce = this.getFluce()
     this.setState({
-      partialStoresState: pick(this.props.stores || [], fluce.stores)
+      partialStoresState: pick(stores, fluce.stores)
     })
   }
 
