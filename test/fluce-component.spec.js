@@ -148,17 +148,6 @@ describe('<Fluce/>', () => {
     fluce.addStore('counter3', storeCounter)
     fluce.addStore('counter4', storeCounter2)
 
-    // fluce.addStore('whatToListen', {
-    //   initial() {
-    //     return ['counter']
-    //   },
-    //   reducers: {
-    //     whatToListenUpdate(_, next) {
-    //       return next
-    //     }
-    //   }
-    // })
-
     it('should pass initial state', () => {
       var renderer = createRenderer()
       renderer.render(<Fluce fluce={fluce} stores={['counter', 'counter2']}><div/></Fluce>)

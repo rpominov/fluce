@@ -53,7 +53,7 @@ class Fluce extends React.Component {
     }
   }
 
-  updateLocalState(stores) {
+  updateLocalState(stores: Array<string>) {
     var fluce = this.getFluce()
     this.setState({
       partialStoresState: pick(stores, fluce.stores)
