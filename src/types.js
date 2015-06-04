@@ -14,9 +14,7 @@ export type StoreStates = {[key: string]: any}
 
 export type FluceInstance = {
   stores: {[key: string]: any},
-  actions: {[key: string]: Function},
   addStore(name: string, store: Store): void,
-  addActionCreator(name: string, getCreator: (fluce: FluceInstance) => Function): void,
   dispatch(type: string, payload: any): void,
   subscribe(stores: Array<string>, callback: (updatedStores: Array<string>) => void): () => void,
   _countListeners(): number

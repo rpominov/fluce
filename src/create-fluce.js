@@ -15,10 +15,6 @@ export default function(): FluceInstance {
     stores[name] = store
   }
 
-  function addActionCreator(name, getCreator) {
-    fluce.actions[name] = getCreator(fluce)
-  }
-
   function dispatch(type, payload) {
     replaceState(reduceAllStores(stores, {type, payload}, fluce.stores))
   }
@@ -49,9 +45,7 @@ export default function(): FluceInstance {
 
   var fluce = {
     stores: Object.create(null),
-    actions: Object.create(null),
     addStore,
-    addActionCreator,
     dispatch,
     subscribe,
 
