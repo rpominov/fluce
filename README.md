@@ -23,10 +23,6 @@ The name is combined from "flux" and "reduce".
 $ npm install fluce
 ```
 
-```js
-const createFluce = require('fluce/create-fluce');
-```
-
 
 ## Store
 
@@ -73,6 +69,8 @@ only one instance in the browser, but may want to create an instance
 for each request on the server.
 
 ```js
+const createFluce = require('fluce/create-fluce');
+
 const fluce = createFluce();
 ```
 
@@ -101,9 +99,13 @@ If two or more stores change in response to a single action, the callback will
 be called only once. Also if a reducer returns same state, the store will be
 considered not changed.
 
+
 ## Example
 
 ```js
+const createFluce = require('fluce/create-fluce');
+
+
 // Setup
 
 const fluce = createFluce();
