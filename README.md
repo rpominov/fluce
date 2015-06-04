@@ -168,21 +168,27 @@ It can have only one child, and renders it with a bit of a magic
 (adds two more props to it).
 
 ```js
-React.render(<Fluce fluce={fluce}>
-  <div>
-    <Fluce stores={['user']}>
-      <Header />
-    </Fluce>
-    <div>
-      <Fluce stores={['productsFilter']}>
-        <ProductsFilter />
+const Fluce = require('fluce/fluce-component');
+
+class App extends React.Component {
+  render() {
+    return <div>
+      <Fluce stores={['user']}>
+        <Header />
       </Fluce>
-      <Fluce stores={['products', 'productsFilter']}>
-        <ProductsList layout='cards' />
-      </Fluce>
-    </div>
-  </div>
-</Fluce>, document.getElementById('root'));
+      <div>
+        <Fluce stores={['productsFilter']}>
+          <ProductsFilter />
+        </Fluce>
+        <Fluce stores={['products', 'productsFilter']}>
+          <ProductsList layout='cards' />
+        </Fluce>
+      </div>
+    </div>;
+  }
+}
+
+React.render(<Fluce fluce={fluce}><App /></Fluce>, document.getElementById('root'));
 ```
 
 In this example `Header` will be rendered as
@@ -215,6 +221,8 @@ Learn more about
 [Higher-order components as a pattern](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775).
 
 ```js
+const fluceHOC = require('fluce/fluce-hoc');
+
 class UserBlock {
   render() {
     return <div>
@@ -224,15 +232,20 @@ class UserBlock {
   }
 }
 
-const UserBlockEnhanced = listenStores(['user'], UserBlock);
+const UserBlockFluced = fluceHOC({stores: ['user']}, UserBlock);
 
-// We still need to pass fluce instance somewhere,
-// that's why top <Fluce> wrapper is still used.
-React.render(<Fluce fluce={fluce}>
-  ...
-  <UserBlockEnhanced />
-  ...
-<Fluce>, document.getElementById('root'))
+
+class App extends React.Component {
+  render() {
+    return <div>
+      ...
+      <UserBlockFluced />
+      ...
+    </div>;
+  }
+}
+
+React.render(<Fluce fluce={fluce}><App /></Fluce>, document.getElementById('root'))
 ```
 
 ## Optimistic dispatch
