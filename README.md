@@ -51,10 +51,10 @@ let myStore = {
     return myInitialState;
   },
   reducers: {
-    actionName1(currentStoreState, actionPayload) {
+    actionType1(currentStoreState, actionPayload) {
       return computeNewState(currentStoreState, actionPayload);
     },
-    actionName2(currentStoreState, actionPayload) {
+    actionType2(currentStoreState, actionPayload) {
       /* ... */
     }
   }
