@@ -69,9 +69,9 @@ only one instance in the browser, but may want to create an instance
 for each request on the server.
 
 ```js
-const createFluce = require('fluce/create-fluce');
+let createFluce = require('fluce/create-fluce');
 
-const fluce = createFluce();
+let fluce = createFluce();
 ```
 
 When an instance created, you can add stores to it:
@@ -103,12 +103,12 @@ considered not changed.
 ## Example
 
 ```js
-const createFluce = require('fluce/create-fluce');
+let createFluce = require('fluce/create-fluce');
 
 
 // Setup
 
-const fluce = createFluce();
+let fluce = createFluce();
 
 fluce.addStore('counter', {
   initial() {
@@ -170,7 +170,7 @@ It can have only one child, and renders it with a bit of a magic
 (adds two more props to it).
 
 ```js
-const Fluce = require('fluce/fluce-component');
+let Fluce = require('fluce/fluce-component');
 
 class App extends React.Component {
   render() {
@@ -223,7 +223,7 @@ Learn more about
 [Higher-order components as a pattern](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775).
 
 ```js
-const fluceHOC = require('fluce/fluce-hoc');
+let fluceHOC = require('fluce/fluce-hoc');
 
 class UserBlock {
   render() {
@@ -234,7 +234,7 @@ class UserBlock {
   }
 }
 
-const UserBlockFluced = fluceHOC({stores: ['user']}, UserBlock);
+let UserBlockFluced = fluceHOC({stores: ['user']}, UserBlock);
 
 
 class App extends React.Component {
@@ -260,7 +260,7 @@ and replay all actions except the canceled one.
 ```js
 fluce.addActionCreator('fooAdd', (fluce) => {
   return (foo) => {
-    const action = fluce.optimisticallyDispatch('fooAdd', foo);
+    let action = fluce.optimisticallyDispatch('fooAdd', foo);
     addFooOnServer(foo)
       .then(
         // To confirm an optimistic dispatch is as important as to cancel,
