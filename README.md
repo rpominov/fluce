@@ -66,20 +66,6 @@ let myStore = {
 ```
 
 
-## Action creators
-
-Action creator in Fluce is a function that takes a Fluce instance and returns another function — the action creator itself:
-
-```js
-let myActionCreator = (fluce) => {
-  return (some, args) => {
-    // do something, call `fluce.dispatch()` eventually with the result
-    fluce.dispatch('actionName', payload);
-  }
-};
-```
-
-
 ## Fluce instance
 
 You start use Fluce by creating an instance of it. Normally you want
@@ -90,17 +76,16 @@ for each request on the server.
 const fluce = createFluce();
 ```
 
-When an instance created, you can add stores and action creators to it,
-order in which you add them doesn't matter:
+When an instance created, you can add stores to it:
 
 ```js
-fluce.addStore('storeName', myStore);
-fluce.addActionCreator('actionCreatorName', myActionCreator);
+fluce.addStore('storeName1', myStore1);
+fluce.addStore('storeName2', myStore2);
 ```
 
 After this done, you can access each store's current state as `fluce.stores.storeName`,
-and call an action creator as `fluce.actions.actionCreatorName(some, args)`.
-Also you can subscribe to changes of states:
+and dispatch actions with `fluce.dispatch('actionType', payload)`.
+Also you can subscribe to changes of stores' states:
 
 ```js
 let unsubscribe = fluce.subscribe(['storeName1', 'storeName2'], (updatedStoresNames) => {
@@ -151,21 +136,13 @@ fluce.addStore('counterInverted', {
   }
 });
 
-fluce.addActionCreator('counterAdd', (fluce) => {
-  return (x) => fluce.dispatch('counterAdd', x);
-});
-
-fluce.addActionCreator('counterSubtract', (fluce) => {
-  return (x) => fluce.dispatch('counterSubtract', x);
-});
-
 
 // Usage
 
 console.log(fluce.stores.counter); // => 0
 console.log(fluce.stores.counterInverted); // => 0
 
-fluce.actions.counterAdd(10);
+fluce.actions.dispatch('counterAdd', 10);
 
 console.log(fluce.stores.counter); // => 10
 console.log(fluce.stores.counterInverted); // => -10
@@ -174,7 +151,7 @@ fluce.subscribe(['counter', 'counterInverted'], (updated) => {
   console.log('following stores have updated:', updated);
 });
 
-fluce.actions.counterSubtract(5);
+fluce.actions.dispatch('counterSubtract', 5);
 // => following stores have updated: ['counter', 'counterInverted']
 ```
 
