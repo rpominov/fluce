@@ -25,6 +25,7 @@ describe('<Fluce/>', () => {
       err = e
     }
     expect(err.message).toBe('Invariant Violation: onlyChild must be passed a children with exactly one child.')
+    renderer.unmount()
   })
 
 
@@ -34,6 +35,7 @@ describe('<Fluce/>', () => {
     var renderer = createRenderer()
     renderer.render(<Fluce fluce={fluce}><div foo='bar' /></Fluce>)
     var result = renderer.getRenderOutput()
+    renderer.unmount()
 
     expect(result.type).toBe('div')
     expect(result.props).toEqual({foo: 'bar', fluce, stores: Object.create(null)})
@@ -157,19 +159,15 @@ describe('<Fluce/>', () => {
     it('should pass initial state', () => {
       var renderer = createRenderer()
       renderer.render(<Fluce fluce={fluce} stores={['counter', 'counter2']}><div/></Fluce>)
-      var result = renderer.getRenderOutput()
-      expect(result.props.stores).toEqual(removeProto({counter: 0, counter2: 0}))
+      expect(renderer.getRenderOutput().props.stores).toEqual(removeProto({counter: 0, counter2: 0}))
       renderer.unmount()
     })
 
     it('should pass updated state', () => {
       var renderer = createRenderer()
       renderer.render(<Fluce fluce={fluce} stores={['counter', 'counter2']}><div/></Fluce>)
-
       fluce.dispatch('add', 10)
-
-      var result = renderer.getRenderOutput()
-      expect(result.props.stores).toEqual(removeProto({counter: 10, counter2: -10}))
+      expect(renderer.getRenderOutput().props.stores).toEqual(removeProto({counter: 10, counter2: -10}))
       renderer.unmount()
     })
 

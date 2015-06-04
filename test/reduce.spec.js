@@ -1,8 +1,15 @@
 /* @flow */
 
 import {reduceStore, reduceAllStores} from '../src/reduce'
-import {storeCounter, storeCounter2, counterStores,
-  actionAdd5, actionSubtract7, actionMult2} from './fixtures'
+import {storeCounter, storeCounter2} from './fixtures'
+
+
+
+var actionAdd5 = {type: 'add', payload: 5}
+var actionSubtract7 = {type: 'subtract', payload: 7}
+var actionMult2 = {type: 'multiply', payload: 2}
+
+
 
 describe('reduceStore', () => {
 
@@ -19,6 +26,11 @@ describe('reduceStore', () => {
 
 
 describe('reduceAllStores', () => {
+
+  var counterStores = {
+    counter: storeCounter,
+    counter2: storeCounter2
+  }
 
   it('update all stores', () => {
     var states = {
