@@ -230,11 +230,13 @@ And here is an example with custom render function:
   stores={{counter: 'myCounterStore'}}
   actionCreators={{decrement, increment}}
   render={(stores, actionCreators, fluce) => {
+
     return <Counter
       counter={stores.counter}
       onIncrement={actionCreators.increment}
       onDecrement={actionCreators.decrement}
-    />
+    />;
+
   }}
 />
 
