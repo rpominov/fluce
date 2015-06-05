@@ -172,10 +172,10 @@ renders it with a bit of a magic (adds more props to it).
 `<Fluce/>` accepts following props:
 
  - `fluce` — the Fluce instance to use, the property is optional if there is another `<Fluce/>` up the tree with this property specified.
- - `stores` — object of the shape `{foo: `storeName`, bar: `anotherStoreName`, ...}`, containing name of stores from which you want to read.
+ - `stores` — object of the shape `{foo: 'storeName', bar: 'anotherStoreName', ...}`, containing name of stores from which you want to read.
  Current state of each of these stores will be always available on child component's props (`foo` and `bar` are the props names).
- - `actionCreators` — object of shape `{foo: (fluce, arg1, agr2) => {/*...*/ fluce.dispatch('baz', bar)}, ...}`, containing action creators functions that will be available as props on child component (`foo` is the name of prop), except you won't need to pass first arg (`fluce` instance) to action creators, you call it like `this.props.foo(arg1, agr2)`.
- - `render` — custom render function you can provide, that will be used instead of simply render child with additional props.
+ - `actionCreators` — object of shape `{foo: (fluce, arg1, agr2) => {/*...*/}, ...}`, containing action creators functions that will be available as props on child component (`foo` is a prop name). When you call them, you won't need to pass first arg (`fluce` — Fluce instance), you call it like this `this.props.foo(arg1, agr2)`.
+ - `render` — a custom render function you can provide, that will be used instead of simply render child with additional props.
 
 
 ```js
