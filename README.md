@@ -164,91 +164,87 @@ The features below aren't done yet.
 
 ## &lt;Fluce /&gt; React component
 
-`Fluce` is an helper component, you can use to subscribe to stores.
-It outputs nothing but it's child component to the result DOM.
-It can have only one child, and renders it with a bit of a magic
-(adds two more props to it).
+`<Fluce/>` is an helper component, you can use to subscribe to stores and
+fire actions from a component that know nothing about Fluce. It outputs nothing
+but it's child component to the result DOM. It can have only one child, and
+renders it with a bit of a magic (adds more props to it).
+
+`<Fluce/>` accepts following props:
+
+ - `fluce` — the Fluce instance to use, the property is optional if there is another `<Fluce/>` up the tree with this property specified.
+ - `stores` — object of the shape `{foo: `storeName`, bar: `anotherStoreName`, ...}`, containing name of stores from which you want to read.
+ Current state of each of these stores will be always available on child component's props (`foo` and `bar` are the props names).
+ - `actionCreators` — object of shape `{foo: (fluce, arg1, agr2) => {/*...*/ fluce.dispatch('baz', bar)}, ...}`, containing action creators functions that will be available as props on child component (`foo` is the name of prop), except you won't need to pass first arg (`fluce` instance) to action creators, you call it like `this.props.foo(arg1, agr2)`.
+ - `render` — custom render function you can provide, that will be used instead of simply render child with additional props.
+
 
 ```js
 let Fluce = require('fluce/fluce-component');
 
-class App extends React.Component {
+class Counter extends React.Component {
   render() {
+
+    // Also `this.props.fluce` will be available here,
+    // but you shouldn't need it in most cases.
+
     return <div>
-      <Fluce stores={['user']}>
-        <Header />
-      </Fluce>
-      <div>
-        <Fluce stores={['productsFilter']}>
-          <ProductsFilter />
-        </Fluce>
-        <Fluce stores={['products', 'productsFilter']}>
-          <ProductsList layout='cards' />
-        </Fluce>
-      </div>
+      <button onClick={this.props.onDecrement}>-</button>  
+      {this.props.counter}
+      <button onClick={this.props.onIncrement}>+</button>
     </div>;
+  }
+}
+
+function increment(fluce) {
+  fluce.dispatch('counterAdd', 1);
+}
+
+function decrement(fluce) {
+  fluce.dispatch('counterSubtract', 1);
+}
+
+class App extends React.Component {
+  constructor() {
+    render() {
+      return <div>
+        ...
+        <Fluce
+          stores={{counter: 'myCounterStore'}}
+          actionCreators={{onDecrement: decrement, onIncrement: increment}}
+        >
+          <Counter />
+        </Fluce>
+        ...
+      </div>;
+    }
   }
 }
 
 React.render(<Fluce fluce={fluce}><App /></Fluce>, document.getElementById('root'));
 ```
 
-In this example `Header` will be rendered as
-`<Header fluce={fluce} stores={{user: userStoreState}} />`. So you can access
-stores' state, and the `fluce` instance from `this.props`. Same goes for
-`ProductsFilter` and `ProductsList`, except `ProductsList` will also have
-`layout` property, like so:
+And here is an example with custom render function:
 
 ```js
-<ProductsList layout='cards' fluce={fluce} stores={{
-  products: currentStateOfProductsStore,
-  productsFilter: currentStateOfProductsFilterStore
-}} />
-```
+<Fluce
+  stores={{counter: 'myCounterStore'}}
+  actionCreators={{decrement, increment}}
+  render={(stores, actionCreators, fluce) => {
+    return <Counter
+      counter={stores.counter}
+      onIncrement={actionCreators.increment}
+      onDecrement={actionCreators.decrement}
+    />
+  }}
+/>
 
-Note: you need to provide `fluce` instance that will be used. You can pass it to
-any instance of `Fluce` component, but normally you pass it only to one on top,
-and others get it from there.
+```
 
 Internally we use [context](https://facebook.github.io/react/blog/2014/03/28/the-road-to-1.0.html#context)
 to pass `fluce` instance through components tree, and
 [`React.addons.cloneWithProps`](https://facebook.github.io/react/docs/clone-with-props.html)
 to add props to child component.
 
-
-## Higher-order React component
-
-You can think of it like wrapping your component into &lt;Fluce /&gt; in advance.
-Learn more about
-[Higher-order components as a pattern](https://gist.github.com/sebmarkbage/ef0bf1f338a7182b6775).
-
-```js
-let fluceHOC = require('fluce/fluce-hoc');
-
-class UserBlock {
-  render() {
-    return <div>
-      Hi, {this.props.stores.user.name}!
-      <button onClick={() => this.fluce.actions.logout()}>logout</button>
-    </div>;
-  }
-}
-
-let UserBlockFluced = fluceHOC({stores: ['user']}, UserBlock);
-
-
-class App extends React.Component {
-  render() {
-    return <div>
-      ...
-      <UserBlockFluced />
-      ...
-    </div>;
-  }
-}
-
-React.render(<Fluce fluce={fluce}><App /></Fluce>, document.getElementById('root'))
-```
 
 ## Optimistic dispatch
 
