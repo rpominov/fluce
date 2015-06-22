@@ -1,6 +1,6 @@
 # Project status
 
-It's unfinished and frozen for now because of existing of a better alternative — [Redux](https://github.com/gaearon/redux)
+It's unfinished and frozen for now because of existence of a better alternative — [Redux](https://github.com/gaearon/redux)
 
 # Fluce
 
