@@ -1,3 +1,7 @@
+# Project status
+
+It's unfinished and frozen for now because of existing of better alternative — [Redux](https://github.com/gaearon/redux)
+
 # Fluce
 
 [![Dependency Status](https://david-dm.org/rpominov/fluce.svg)](https://david-dm.org/rpominov/fluce)
