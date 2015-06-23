@@ -78,14 +78,14 @@ let createFluce = require('fluce/create-fluce');
 let fluce = createFluce();
 ```
 
-When an instance created, you can add stores to it:
+When an instance is created, you can add stores to it:
 
 ```js
 fluce.addStore('storeName1', myStore1);
 fluce.addStore('storeName2', myStore2);
 ```
 
-After this done, you can access each store's current state as `fluce.stores.storeName`,
+After this is done, you can access each store's current state as `fluce.stores.storeName`,
 and dispatch actions with `fluce.dispatch('actionType', payload)`.
 Also you can subscribe to changes of stores' states:
 
